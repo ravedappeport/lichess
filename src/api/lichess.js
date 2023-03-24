@@ -1,22 +1,31 @@
-import { Chess } from 'chess.js';
+// This file now includes two functions: 
+// getTopPlayers and getRandomGame. getTopPlayers fetches the top 10 players 
+// for each game variation, while getRandomGame fetches a random game from a specified player and game variation.
 
-const getDailyPuzzle = async () => {
-  const response = await fetch('https://lichess.org/api/puzzle/daily');
-  const data = await response.json();
+import axios from 'axios';
 
-  const chess = new Chess();
-  chess.loadPgn(data.game.pgn);
-  for (let i = 0; i < data.puzzle.initialPly - chess.history().length; i++) {
-    chess.forward(); // Go to the initial position of the puzzle
+const API_BASE_URL = 'https://lichess.org/api';
+
+export const getTopPlayers = async () => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/player`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching top players:', error);
+    throw error;
   }
-
-  const dailyPuzzle = {
-    title: `Daily Puzzle: ${data.puzzle.id}`,
-    fen: chess.fen(), // Get the FEN for the puzzle position
-    description: `Solution: ${data.puzzle.solution.join(', ')}`, // Format the solution
-  };
-
-  return dailyPuzzle;
 };
 
-export { getDailyPuzzle };
+export const getRandomGame = async (player, perfType) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/games/user/${player}?max=1&rated=1&perfType=${perfType}`, {
+      headers: { 'Content-Type': 'application/x-ndjson' },
+      responseType: 'text',
+    });
+    const games = response.data.split('\n').filter((game) => game.length > 0).map((game) => JSON.parse(game));
+    return games[0];
+  } catch (error) {
+    console.error('Error fetching random game:', error);
+    throw error;
+  }
+};

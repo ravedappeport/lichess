@@ -1,21 +1,19 @@
-// import logo from './logo.svg';
-import './App.css';
+// This file contains the App component which is the main entry point of the application.
+// It renders the RandomGame component.
 
-import ChessboardComponent from './components/Chessboard';
-import DailyLesson from './components/DailyLesson';
+import React from 'react';
+import './App.css';
+import RandomGame from './components/RandomGame';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Chess Lessons</h1>
+        <h1>Random Chess Game</h1>
       </header>
-      <main>
-        <DailyLesson />
-      </main>
+      <RandomGame />
     </div>
   );
 }
-
 
 export default App;
