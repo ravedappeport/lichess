@@ -19,3 +19,9 @@
 .move-history-container {
   flex: 1; /* Adjust this value to control the width */
 }
+
+.move-history p:hover {
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
