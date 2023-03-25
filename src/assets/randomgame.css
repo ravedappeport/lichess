@@ -11,14 +11,6 @@
     height: 100vh;
   }
   
-  /* .game-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 20px;
-    flex-grow: 1;
-  } */
-
   .game-container {
     display: flex;
     flex-direction: row;
@@ -28,14 +20,29 @@
     width: 100%;
 
   }
-
+/* 
   .game-board-container {
     width: 500px;
     height: 500px;
     margin: 10px 20px;
-    /* flex-grow: 1; */
+    align-items: center;
+  } */
+
+  /* Keep game-board-wrapper and move-history-container side by side */
+  .game-board-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 30px;
   }
-  
+
+  /* Keep the chessboard and game controls in a vertical column */
+  .game-board-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
   .game-board {
     width: 100%;
     height: 100%;
@@ -46,20 +53,19 @@
     /* flex-grow: 1; */
   }
   
-  @media only screen and (max-width: 600px) {
-    .random-game {
-      padding: 10px;
-    }
-    
-    .game-board-container {
-      width: 100%;
-      margin: 0;
-    }
-    
-    .game-info {
-      margin: 10px 0;
-      width: 100%;
-    }
+  /* Center align the header and game-info-container */
+  .random-game-header,
+  .game-info-container {
+    display: flex;
+    justify-content: center;
+  }
+
+  /* Center align the player and game info and set up columns */
+  .game-info-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
   }
 
   .random-game-header {
@@ -93,4 +99,20 @@
   
   .random-game button:active {
     background-color: #2b2b2b;
+  }
+
+  @media only screen and (max-width: 600px) {
+    .random-game {
+      padding: 10px;
+    }
+    
+    .game-board-container {
+      width: 100%;
+      margin: 0;
+    }
+    
+    .game-info {
+      margin: 10px 0;
+      width: 100%;
+    }
   }

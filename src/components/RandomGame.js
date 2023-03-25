@@ -8,6 +8,8 @@ import { fetchRandomGame } from '../api/lichess';
 import { Chess } from 'chess.js';
 // import StockfishWorker from 'workerize-loader!./stockfish.worker';
 // import StockfishWorker from './stockfish.worker';
+import MoveHistory from './MoveHistory';
+
 
 const RandomGame = () => {
   const [game, setGame] = useState(null);
@@ -15,9 +17,7 @@ const RandomGame = () => {
   const chess = useRef(new Chess());
   const [playerInfo, setPlayerInfo] = useState(null);
   const [currentPosition, setCurrentPosition] = useState("");
-  const [moves, setMoves] = useState([]); // Add this line
-  // const [analysis, setAnalysis] = useState([]); // New state variable
-  // const [stockfishWorkerInstance, setStockfishWorkerInstance] = useState(null);
+  const [moves, setMoves] = useState([]); 
 
   useEffect(() => {
     getRandomGame();
@@ -29,17 +29,6 @@ const RandomGame = () => {
       loadPGN(game.pgn);
     }
   }, [game]);
-
-  // useEffect(() => {
-  //   const workerInstance = StockfishWorker();
-  //   setStockfishWorkerInstance(workerInstance);
-
-  //   return () => {
-  //     if (stockfishWorkerInstance) {
-  //       stockfishWorkerInstance.terminate();
-  //     }
-  //   };
-  // }, []);
 
   async function getRandomGame() {
     const response = await fetchRandomGame();
@@ -106,7 +95,7 @@ const RandomGame = () => {
       <div className="random-game-header">
         <h1>Random Top Lichess Games</h1>
       </div>
-      <div className="game-container">
+      <div className="game-info-container">
         <div className="game-info">
           {playerInfo.map((player, index) => (
             <div key={index}>
@@ -120,23 +109,19 @@ const RandomGame = () => {
           <p>Game Winner: {game.winner}</p>
           <p>Game outcome: {game.status}</p>
         </div>
-        <div className="game-board-container">
-          <div>
+      </div>
+      <div className="game-board-container">
+        <div className="game-board-wrapper">
+          <ChessgroundBoard fen={currentPosition} onMove={null} className="game-board" />
+          <div className="game-controls">
             <button onClick={handleReset}>Reset</button>
             <button onClick={handleMoveBackward}>Previous move</button>
             <button onClick={handleMoveForward}>Next move</button>
           </div>
-          <ChessgroundBoard fen={currentPosition} onMove={null} className="game-board" />
         </div>
-        
-        {/* <div className="analysis"> 
-          <h2>Analysis</h2>
-          <ul>
-            {analysis.map((move, index) => (
-              <li key={index}>{move}</li>
-            ))}
-          </ul>
-        </div> */}
+        <div className="move-history-container">
+        <MoveHistory moves={moves} currentMove={currentMove} />
+        </div>
       </div>
     </div>
   );

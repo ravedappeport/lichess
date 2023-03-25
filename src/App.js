@@ -4,6 +4,7 @@
 import React from 'react';
 import './App.css';
 import './assets/randomgame.css';
+import './assets/movehistory.css';
 import RandomGame from './components/RandomGame';
 
 function App() {

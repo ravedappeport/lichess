@@ -1,0 +1,21 @@
+.move-history {
+  width: 100%;
+}
+
+.move-pair {
+  display: flex;
+  align-items: center;
+}
+
+.move-number {
+  flex: 0 0 20px;
+}
+
+.move-white,
+.move-black {
+  flex: 1;
+}
+
+.move-history-container {
+  margin-left: 30px;
+}
