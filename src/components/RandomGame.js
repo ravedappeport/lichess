@@ -1,7 +1,7 @@
 // This file contains the RandomGame component which fetches and displays a random game
 // from the selected player and variant.
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Chessboard } from 'react-chessboard';
 import { fetchRandomGame } from '../api/lichess';
 import { Chess } from 'chess.js';
@@ -9,8 +9,9 @@ import { Chess } from 'chess.js';
 const RandomGame = () => {
   const [game, setGame] = useState(null);
   const [currentMove, setCurrentMove] = useState(0);
-  const [chess, setChess] = useState(new Chess());
+  const chess = useRef(new Chess());
   const [playerInfo, setPlayerInfo] = useState(null);
+  const [currentPosition, setCurrentPosition] = useState("");
 
   useEffect(() => {
     getRandomGame();
@@ -29,27 +30,26 @@ const RandomGame = () => {
   }
 
   function loadPGN(pgn) {
-    chess.loadPgn(pgn);
-    // console.log(chess.fen())
-    const currentPosition = chess.fen();
-    setChess(currentPosition);
+    chess.current.loadPgn(pgn);
+    const currentPosition = chess.current.fen();
+    setCurrentPosition(currentPosition);
   }
 
   function handleMoveForward() {
-    if (currentMove < chess.history().length - 1) {
+    if (currentMove < chess.current.history().length - 1) {
       setCurrentMove(currentMove + 1);
-      chess.move(chess.history({ verbose: true })[currentMove]);
-      const currentPosition = chess.fen();
-      setChess(currentPosition);
+      chess.current.move(chess.current.history({ verbose: true })[currentMove]);
+      const currentPosition = chess.current.fen();
+      setCurrentPosition(currentPosition);
     }
   }
-
+  
   function handleMoveBackward() {
     if (currentMove > 0) {
       setCurrentMove(currentMove - 1);
-      chess.undo();
-      const currentPosition = chess.fen();
-      setChess(currentPosition);
+      chess.current.undo();
+      const currentPosition = chess.current.fen();
+      setCurrentPosition(currentPosition);
     }
   }
 
@@ -66,7 +66,7 @@ const RandomGame = () => {
         <button onClick={handleMoveBackward}>Previous move</button>
         <button onClick={handleMoveForward}>Next move</button>
       </div>
-      <Chessboard position={chess.fen} />
+      <Chessboard position={currentPosition} />
       <div>
         {playerInfo.map((player, index) => (
           <div key={index}>
