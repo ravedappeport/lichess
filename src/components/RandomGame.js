@@ -3,9 +3,11 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 // import { Chessboard } from 'react-chessboard';
-import ChessgroundBoard   from './ChessgroundBoard';
+import ChessgroundBoard from './ChessgroundBoard';
 import { fetchRandomGame } from '../api/lichess';
 import { Chess } from 'chess.js';
+// import StockfishWorker from 'workerize-loader!./stockfish.worker';
+// import StockfishWorker from './stockfish.worker';
 
 const RandomGame = () => {
   const [game, setGame] = useState(null);
@@ -14,6 +16,8 @@ const RandomGame = () => {
   const [playerInfo, setPlayerInfo] = useState(null);
   const [currentPosition, setCurrentPosition] = useState("");
   const [moves, setMoves] = useState([]); // Add this line
+  // const [analysis, setAnalysis] = useState([]); // New state variable
+  // const [stockfishWorkerInstance, setStockfishWorkerInstance] = useState(null);
 
   useEffect(() => {
     getRandomGame();
@@ -25,6 +29,17 @@ const RandomGame = () => {
       loadPGN(game.pgn);
     }
   }, [game]);
+
+  // useEffect(() => {
+  //   const workerInstance = StockfishWorker();
+  //   setStockfishWorkerInstance(workerInstance);
+
+  //   return () => {
+  //     if (stockfishWorkerInstance) {
+  //       stockfishWorkerInstance.terminate();
+  //     }
+  //   };
+  // }, []);
 
   async function getRandomGame() {
     const response = await fetchRandomGame();
@@ -60,6 +75,28 @@ const RandomGame = () => {
     }
   }
 
+  function handleReset() {
+    setCurrentMove(0);
+    chess.current.reset();
+    const currentPosition = chess.current.fen();
+    setCurrentPosition(currentPosition);
+  }  
+
+  // async function handleAnalysis() {
+  //   if (!stockfishWorkerInstance) {
+  //     return;
+  //   }
+
+  //   stockfishWorkerInstance.postMessage('uci');
+
+  //   stockfishWorkerInstance.onmessage = (event) => {
+  //     console.log(event.data);
+  //   };
+
+  //   stockfishWorkerInstance.postMessage(`position fen ${currentPosition}`);
+  //   stockfishWorkerInstance.postMessage('go depth 10');
+  // }
+  
   if (!game || !playerInfo) {
     return <div>Loading...</div>;
   }
@@ -68,18 +105,40 @@ const RandomGame = () => {
     <div className="random-game">
       <h1>Random Chess Game</h1>
       <div>
+        <button onClick={handleReset}>Reset</button>
         <button onClick={handleMoveBackward}>Previous move</button>
         <button onClick={handleMoveForward}>Next move</button>
       </div>
-      <ChessgroundBoard fen={currentPosition} onMove={null} /> {/* Replace the Chessboard component */}
+      <div style={{ width: "500px", height: "500px" }}>
+        <ChessgroundBoard fen={currentPosition} onMove={null} />
+      </div>
       <div>
         {playerInfo.map((player, index) => (
           <div key={index}>
-            <h2>{player.name}</h2>
+            <h3>{player.user.name}</h3>
+            <p>Title: {player.user.title}</p>
             <p>Rating: {player.rating}</p>
+            <p>Playing: {index === 0 ? 'White' : 'Black'}</p> 
           </div>
         ))}
+        <p>Game type: {game.speed}</p>
+        <p>Game Winner: {game.winner}</p>
+        <p>Game outcome: {game.status}</p>
       </div>
+      <div>
+        <button onClick={handleReset}>Reset</button>
+        <button onClick={handleMoveBackward}>Previous move</button>
+        <button onClick={handleMoveForward}>Next move</button>
+        {/* <button onClick={handleAnalysis}>Analyze</button>  */}
+      </div>
+      {/* <div className="analysis"> 
+        <h2>Analysis</h2>
+        <ul>
+          {analysis.map((move, index) => (
+            <li key={index}>{move}</li>
+          ))}
+        </ul>
+      </div> */}
     </div>
   );
 };
