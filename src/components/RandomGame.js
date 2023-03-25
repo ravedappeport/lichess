@@ -27,22 +27,28 @@ const RandomGame = () => {
   async function getRandomGame() {
     const response = await fetchRandomGame();
     setGame(response);
+    setCurrentPosition("start"); // Set the initial position to the start
   }
+  
 
   function loadPGN(pgn) {
-    chess.current.loadPgn(pgn);
+    chess.current.loadPgn(pgn, { sloppy: true });
     const currentPosition = chess.current.fen();
     setCurrentPosition(currentPosition);
   }
+  
+  
 
   function handleMoveForward() {
     if (currentMove < chess.current.history().length - 1) {
       setCurrentMove(currentMove + 1);
-      chess.current.move(chess.current.history({ verbose: true })[currentMove]);
+      const move = chess.current.history({ verbose: true })[currentMove];
+      chess.current.move({ from: move.from, to: move.to, promotion: 'q' });
       const currentPosition = chess.current.fen();
       setCurrentPosition(currentPosition);
     }
   }
+  
   
   function handleMoveBackward() {
     if (currentMove > 0) {

@@ -18,19 +18,19 @@ export async function fetchTopPlayers() {
 
 export async function fetchRandomGame() {
   try {
-    const topPlayers = await fetchTopPlayers();
-    if (!topPlayers) {
+    const topPlayersAllCategories = await fetchTopPlayers();
+    if (!topPlayersAllCategories) {
       return null;
     }
 
-    const randomCategory = getRandomCategory(topPlayers);
-    const randomPlayer = getRandomPlayer(randomCategory);
+    const gameVariant = getRandomGameVariant();
+    const randomPlayer = getRandomPlayer(topPlayersAllCategories, gameVariant);
 
     const response = await axios.get(
       `${API_BASE_URL}/games/user/${randomPlayer}`,
       {
         params: {
-          perfType: randomCategory.key,
+          variant: gameVariant,
           max: 1,
           color: 'random',
           pgnInJson: true,
@@ -41,11 +41,7 @@ export async function fetchRandomGame() {
         },
       }
     );
-
-   
-    // console.log(response.data)
-    // const game = response.data.pgn.split('\n')[0];
-    // return JSON.parse(game);
+  
     return (response.data)
   } catch (error) {
     console.error('Error fetching random game:', error);
@@ -53,13 +49,20 @@ export async function fetchRandomGame() {
   }
 }
 
-function getRandomCategory(topPlayers) {
-  const categories = Object.keys(topPlayers);
-  const randomIndex = Math.floor(Math.random() * categories.length);
-  return topPlayers[categories[randomIndex]];
+// helper function
+function getRandomElement(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
 }
 
-function getRandomPlayer(Category) {
+// get random game variant supported by chess.js
+function getRandomGameVariant() {
+  const supportedVariants = ['bullet', 'blitz', 'rapid', 'classical', 'ultrabullet', 'correspondence'];
+  return getRandomElement(supportedVariants);
+}
+
+// get random top player
+function getRandomPlayer(topPlayersAllCategories, variant) {
+  const Category = topPlayersAllCategories[variant];
   const players = Object.keys(Category)
   const randomIndex = Math.floor(Math.random() * players.length);
   return Category[randomIndex].id;
