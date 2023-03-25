@@ -6,8 +6,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import ChessgroundBoard from './ChessgroundBoard';
 import { fetchRandomGame } from '../api/lichess';
 import { Chess } from 'chess.js';
-// import StockfishWorker from 'workerize-loader!./stockfish.worker';
-// import StockfishWorker from './stockfish.worker';
 import MoveHistory from './MoveHistory';
 
 
@@ -43,8 +41,6 @@ const RandomGame = () => {
     const currentPosition = chess.current.fen();
     setCurrentPosition(currentPosition);
   }
-  
-  
 
   function handleMoveForward() {
     if (currentMove < moves.length - 1) {
@@ -71,20 +67,15 @@ const RandomGame = () => {
     setCurrentPosition(currentPosition);
   }  
 
-  // async function handleAnalysis() {
-  //   if (!stockfishWorkerInstance) {
-  //     return;
-  //   }
-
-  //   stockfishWorkerInstance.postMessage('uci');
-
-  //   stockfishWorkerInstance.onmessage = (event) => {
-  //     console.log(event.data);
-  //   };
-
-  //   stockfishWorkerInstance.postMessage(`position fen ${currentPosition}`);
-  //   stockfishWorkerInstance.postMessage('go depth 10');
-  // }
+  const handleNewRandomGame = async () => {
+    // Fetch a new random game and update the component state accordingly
+    const newGame = await fetchRandomGame();
+    setGame(newGame.game);
+    setPlayerInfo(newGame.players);
+    setMoves(newGame.moves);
+    setCurrentMove(0);
+    setCurrentPosition("start"); // Set the initial position to the start
+  };  
   
   if (!game || !playerInfo) {
     return <div>Loading...</div>;
@@ -95,36 +86,39 @@ const RandomGame = () => {
       <div className="random-game-header">
         <h1>Random Top Lichess Games</h1>
       </div>
-      <div className="game-info-container">
-        <div className="game-info">
-          {playerInfo.map((player, index) => (
-            <div key={index}>
-              <h3>{player.user.name}</h3>
-              <p>Title: {player.user.title}</p>
-              <p>Rating: {player.rating}</p>
-              <p>Playing: {index === 0 ? 'White' : 'Black'}</p> 
-            </div>
-          ))}
-          <p>Game type: {game.speed}</p>
-          <p>Game Winner: {game.winner}</p>
-          <p>Game outcome: {game.status}</p>
-        </div>
-      </div>
-      <div className="game-board-container">
-        <div className="game-board-wrapper">
-          <ChessgroundBoard fen={currentPosition} onMove={null} className="game-board" />
-          <div className="game-controls">
-            <button onClick={handleReset}>Reset</button>
-            <button onClick={handleMoveBackward}>Previous move</button>
-            <button onClick={handleMoveForward}>Next move</button>
+      <div className="game-container">
+        <div className="game-info-container">
+          <div className="game-info">
+            {playerInfo.map((player, index) => (
+              <div key={index}>
+                <h3>{player.user.name}</h3>
+                <p>Title: {player.user.title}</p>
+                <p>Rating: {player.rating}</p>
+                <p>Playing: {index === 0 ? 'White' : 'Black'}</p>
+              </div>
+            ))}
+            <p>Game type: {game.speed}</p>
+            <p>Game Winner: {game.winner}</p>
+            <p>Game outcome: {game.status}</p>
           </div>
         </div>
-        <div className="move-history-container">
-        <MoveHistory moves={moves} currentMove={currentMove} />
+        <div className="game-board-container">
+          <div className="game-board-wrapper">
+          <ChessgroundBoard fen={currentPosition} onMove={null} className="game-board" style={{ width: '100%', height: '100%' }} />
+            <div className="game-controls">
+            <button onClick={handleNewRandomGame}>Pull New Game</button>
+              <button onClick={handleReset}>Reset</button>
+              <button onClick={handleMoveBackward}>Previous move</button>
+              <button onClick={handleMoveForward}>Next move</button>
+            </div>
+          </div>
+          <div className="move-history-container">
+            <MoveHistory moves={moves} currentMove={currentMove} />
+          </div>
         </div>
       </div>
     </div>
-  );
+  );    
 };
 
 export default RandomGame;
