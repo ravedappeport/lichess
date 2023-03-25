@@ -12,6 +12,7 @@ const RandomGame = () => {
   const chess = useRef(new Chess());
   const [playerInfo, setPlayerInfo] = useState(null);
   const [currentPosition, setCurrentPosition] = useState("");
+  const [moves, setMoves] = useState([]); // Add this line
 
   useEffect(() => {
     getRandomGame();
@@ -26,13 +27,14 @@ const RandomGame = () => {
 
   async function getRandomGame() {
     const response = await fetchRandomGame();
-    setGame(response);
+    setGame(response.game);
+    setMoves(response.moves);
     setCurrentPosition("start"); // Set the initial position to the start
   }
   
-
   function loadPGN(pgn) {
     chess.current.loadPgn(pgn, { sloppy: true });
+    chess.current.reset(); 
     const currentPosition = chess.current.fen();
     setCurrentPosition(currentPosition);
   }
@@ -40,16 +42,14 @@ const RandomGame = () => {
   
 
   function handleMoveForward() {
-    if (currentMove < chess.current.history().length - 1) {
+    if (currentMove < moves.length - 1) {
       setCurrentMove(currentMove + 1);
-      const move = chess.current.history({ verbose: true })[currentMove];
-      chess.current.move({ from: move.from, to: move.to, promotion: 'q' });
+      chess.current.move(moves[currentMove], { sloppy: true });
       const currentPosition = chess.current.fen();
       setCurrentPosition(currentPosition);
     }
   }
-  
-  
+
   function handleMoveBackward() {
     if (currentMove > 0) {
       setCurrentMove(currentMove - 1);
@@ -63,8 +63,6 @@ const RandomGame = () => {
     return <div>Loading...</div>;
   }
 
-  console.log(game)
-  console.log(playerInfo)
   return (
     <div className="random-game">
       <h1>Random Chess Game</h1>

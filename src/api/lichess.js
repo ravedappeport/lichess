@@ -42,7 +42,11 @@ export async function fetchRandomGame() {
       }
     );
   
-    return (response.data)
+  return {
+    game: response.data,
+    moves: response.data.moves.split(' '),
+  }
+
   } catch (error) {
     console.error('Error fetching random game:', error);
     return null;
@@ -56,7 +60,7 @@ function getRandomElement(arr) {
 
 // get random game variant supported by chess.js
 function getRandomGameVariant() {
-  const supportedVariants = ['bullet', 'blitz', 'rapid', 'classical', 'ultrabullet', 'correspondence'];
+  const supportedVariants = ['bullet', 'blitz', 'rapid', 'classical'];
   return getRandomElement(supportedVariants);
 }
 
