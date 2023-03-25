@@ -2,7 +2,8 @@
 // from the selected player and variant.
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Chessboard } from 'react-chessboard';
+// import { Chessboard } from 'react-chessboard';
+import ChessgroundBoard   from './ChessgroundBoard';
 import { fetchRandomGame } from '../api/lichess';
 import { Chess } from 'chess.js';
 
@@ -70,7 +71,7 @@ const RandomGame = () => {
         <button onClick={handleMoveBackward}>Previous move</button>
         <button onClick={handleMoveForward}>Next move</button>
       </div>
-      <Chessboard position={currentPosition} />
+      <ChessgroundBoard fen={currentPosition} onMove={null} /> {/* Replace the Chessboard component */}
       <div>
         {playerInfo.map((player, index) => (
           <div key={index}>
