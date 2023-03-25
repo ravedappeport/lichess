@@ -6,26 +6,62 @@ import axios from 'axios';
 
 const API_BASE_URL = 'https://lichess.org/api';
 
-export const getTopPlayers = async () => {
+export async function fetchTopPlayers() {
   try {
     const response = await axios.get(`${API_BASE_URL}/player`);
     return response.data;
   } catch (error) {
     console.error('Error fetching top players:', error);
-    throw error;
+    return null;
   }
-};
+}
 
-export const getRandomGame = async (player, perfType) => {
+export async function fetchRandomGame() {
   try {
-    const response = await axios.get(`${API_BASE_URL}/games/user/${player}?max=1&rated=1&perfType=${perfType}`, {
-      headers: { 'Content-Type': 'application/x-ndjson' },
-      responseType: 'text',
-    });
-    const games = response.data.split('\n').filter((game) => game.length > 0).map((game) => JSON.parse(game));
-    return games[0];
+    const topPlayers = await fetchTopPlayers();
+    if (!topPlayers) {
+      return null;
+    }
+
+    const randomCategory = getRandomCategory(topPlayers);
+    const randomPlayer = getRandomPlayer(randomCategory);
+
+    const response = await axios.get(
+      `${API_BASE_URL}/games/user/${randomPlayer}`,
+      {
+        params: {
+          perfType: randomCategory.key,
+          max: 1,
+          color: 'random',
+          pgnInJson: true,
+          opening: true,
+        }, 
+        headers: {
+          Accept: 'application/x-ndjson',
+        },
+      }
+    );
+
+   
+    // console.log(response.data)
+    // const game = response.data.pgn.split('\n')[0];
+    // return JSON.parse(game);
+    return (response.data)
   } catch (error) {
     console.error('Error fetching random game:', error);
-    throw error;
+    return null;
   }
-};
+}
+
+function getRandomCategory(topPlayers) {
+  const categories = Object.keys(topPlayers);
+  const randomIndex = Math.floor(Math.random() * categories.length);
+  return topPlayers[categories[randomIndex]];
+}
+
+function getRandomPlayer(Category) {
+  const players = Object.keys(Category)
+  const randomIndex = Math.floor(Math.random() * players.length);
+  return Category[randomIndex].id;
+}
+
