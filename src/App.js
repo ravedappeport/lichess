@@ -3,14 +3,12 @@
 
 import React from 'react';
 import './App.css';
+import './assets/randomgame.css';
 import RandomGame from './components/RandomGame';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Random Chess Game</h1>
-      </header>
       <RandomGame />
     </div>
   );

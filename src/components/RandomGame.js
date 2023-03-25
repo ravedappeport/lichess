@@ -103,42 +103,41 @@ const RandomGame = () => {
 
   return (
     <div className="random-game">
-      <h1>Random Chess Game</h1>
-      <div>
-        <button onClick={handleReset}>Reset</button>
-        <button onClick={handleMoveBackward}>Previous move</button>
-        <button onClick={handleMoveForward}>Next move</button>
+      <div className="random-game-header">
+        <h1>Random Top Lichess Games</h1>
       </div>
-      <div style={{ width: "500px", height: "500px" }}>
-        <ChessgroundBoard fen={currentPosition} onMove={null} />
-      </div>
-      <div>
-        {playerInfo.map((player, index) => (
-          <div key={index}>
-            <h3>{player.user.name}</h3>
-            <p>Title: {player.user.title}</p>
-            <p>Rating: {player.rating}</p>
-            <p>Playing: {index === 0 ? 'White' : 'Black'}</p> 
-          </div>
-        ))}
-        <p>Game type: {game.speed}</p>
-        <p>Game Winner: {game.winner}</p>
-        <p>Game outcome: {game.status}</p>
-      </div>
-      <div>
-        <button onClick={handleReset}>Reset</button>
-        <button onClick={handleMoveBackward}>Previous move</button>
-        <button onClick={handleMoveForward}>Next move</button>
-        {/* <button onClick={handleAnalysis}>Analyze</button>  */}
-      </div>
-      {/* <div className="analysis"> 
-        <h2>Analysis</h2>
-        <ul>
-          {analysis.map((move, index) => (
-            <li key={index}>{move}</li>
+      <div className="game-container">
+        <div className="game-info">
+          {playerInfo.map((player, index) => (
+            <div key={index}>
+              <h3>{player.user.name}</h3>
+              <p>Title: {player.user.title}</p>
+              <p>Rating: {player.rating}</p>
+              <p>Playing: {index === 0 ? 'White' : 'Black'}</p> 
+            </div>
           ))}
-        </ul>
-      </div> */}
+          <p>Game type: {game.speed}</p>
+          <p>Game Winner: {game.winner}</p>
+          <p>Game outcome: {game.status}</p>
+        </div>
+        <div className="game-board-container">
+          <div>
+            <button onClick={handleReset}>Reset</button>
+            <button onClick={handleMoveBackward}>Previous move</button>
+            <button onClick={handleMoveForward}>Next move</button>
+          </div>
+          <ChessgroundBoard fen={currentPosition} onMove={null} className="game-board" />
+        </div>
+        
+        {/* <div className="analysis"> 
+          <h2>Analysis</h2>
+          <ul>
+            {analysis.map((move, index) => (
+              <li key={index}>{move}</li>
+            ))}
+          </ul>
+        </div> */}
+      </div>
     </div>
   );
 };

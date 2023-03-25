@@ -11,7 +11,7 @@
     position: relative;
     display: block;
   }
-  
+
   cg-helper {
     position: absolute;
     width: 12.5%;
@@ -82,6 +82,7 @@
   cg-board square.current-premove {
     background-color: rgba(20, 30, 85, 0.5);
   }
+  
   .cg-wrap piece {
     position: absolute;
     top: 0;
