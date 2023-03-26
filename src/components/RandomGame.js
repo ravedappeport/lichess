@@ -16,6 +16,9 @@ const RandomGame = () => {
   const [playerInfo, setPlayerInfo] = useState(null);
   const [currentPosition, setCurrentPosition] = useState("");
   const [moves, setMoves] = useState([]); 
+  const [lastMoveFrom, setLastMoveFrom] = useState(null);
+  const [lastMoveTo, setLastMoveTo] = useState(null);
+
 
   useEffect(() => {
     getRandomGame();
@@ -41,6 +44,16 @@ const RandomGame = () => {
     const currentPosition = chess.current.fen();
     setCurrentPosition(currentPosition);
   }
+
+  function handleMove(from, to) {
+    chess.current.move({ from, to, promotion: 'q' });
+    const fen = chess.current.fen();
+    setCurrentPosition(fen);
+  
+    setLastMoveFrom(from);
+    setLastMoveTo(to);
+  }
+  
 
   function handleMoveForward() {
     if (currentMove < moves.length - 1) {
@@ -104,7 +117,14 @@ const RandomGame = () => {
         </div>
         <div className="game-board-container">
           <div className="game-board-wrapper">
-          <ChessgroundBoard fen={currentPosition} onMove={null} className="game-board" style={{ width: '100%', height: '100%' }} />
+          <ChessgroundBoard
+            fen={currentPosition}
+            onMove={handleMove}
+            lastMoveFrom={lastMoveFrom}
+            lastMoveTo={lastMoveTo}
+            className="game-board"
+            style={{ width: '100%', height: '100%' }}
+            />
             <div className="game-controls">
             <button onClick={handleNewRandomGame}>Pull New Game</button>
               <button onClick={handleReset}>Reset</button>
