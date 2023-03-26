@@ -8,6 +8,8 @@
   align-items: center;
   width: 100vw;
   height: 100vh;
+  min-height: 100vh;
+  overflow-y: scroll;
 }
 
 .game-container {
@@ -45,7 +47,16 @@
   flex-direction: column;
   gap: 10px;
   flex: 3; /* Adjust this value to control the width */
+  /* width: 80%; */
 }
+
+/* .move-history-container {
+  flex: 1;
+  width: 20%;
+  overflow-y: scroll;
+  max-height: 300px;
+  margin-bottom: 20px;
+} */
 
 .game-board {
   width: 100%;
@@ -77,54 +88,73 @@
   background-color: #2b2b2b;
 }
 
+/* iphone css settings */
 @media only screen and (max-width: 600px) {
-  .random-game {
-    padding: 10px;
+  .random-game-header h1 {
+    font-size: 24px;
   }
 
-  .game-info-container {
-    flex-direction: column;
+  .random-game-header p {
+    font-size: 16px;
   }
 
-  .game-board-container {
+  .game-container {
+    display: flex;
     flex-direction: column;
     align-items: center;
-  }
-
-  .game-board {
     width: 100%;
-    height: auto;
-    aspect-ratio: 1 / 1;
+    padding-bottom: 100px;
   }
-}
+  
 
-/* Adjust the size of the chessboard for smaller screens */
-@media (max-width: 992px) {
-  .game-board {
-    padding-bottom: 80%;
+  .game-board-container {
+    width: 100%;
+    height: 0;
+    padding-bottom: 100%;
+    position: relative;
+    margin-bottom: 20px;
   }
 
-  .game-container {
+  .game-board-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 200px;
+  }
+
+  .move-history-container {
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+    max-height: 300px;
+    margin-bottom: 20px;
+  }
+  
+
+  .move-history {
+    font-size: 16px;
+    margin-top: 20px;
+    overflow-y: scroll;
+    max-height: 300px;
+  }
+
+  .move-list {
+    overflow-y: scroll;
+    max-height: 200px;
+  }
+
+  .game-controls {
+    display: flex;
     flex-direction: column;
   }
-}
 
-/* Adjust the size of the chessboard for even smaller screens */
-@media (max-width: 768px) {
-  .game-board {
-    padding-bottom: 60%;
-  }
-
-  .game-container {
-    flex-direction: column;
-  }
-}
-
-@media (max-width: 768px) {
-  .game-container {
-    flex-direction: column;
-  }
-  .game-container {
-    flex-direction: column;
+  .game-controls button {
+    font-size: 16px;
+    margin-bottom: 10px;
+    padding: 10px;
   }
 }
