@@ -103,6 +103,10 @@
   .game-board {
     padding-bottom: 80%;
   }
+
+  .game-container {
+    flex-direction: column;
+  }
 }
 
 /* Adjust the size of the chessboard for even smaller screens */
@@ -110,11 +114,17 @@
   .game-board {
     padding-bottom: 60%;
   }
+
+  .game-container {
+    flex-direction: column;
+  }
 }
 
-/* Adjust the size of the chessboard for the smallest screens */
-@media (max-width: 576px) {
-  .game-board {
-    padding-bottom: 50%;
+@media (max-width: 768px) {
+  .game-container {
+    flex-direction: column;
+  }
+  .game-container {
+    flex-direction: column;
   }
 }

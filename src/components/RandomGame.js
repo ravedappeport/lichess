@@ -58,10 +58,6 @@ const RandomGame = () => {
     if (currentMove < moves.length - 1) {
       setCurrentMove(currentMove + 1);
   
-      if (currentMove === 0) {
-        chess.current.load('start'); // reset the board to the starting position
-      }
-  
       const move = moves[currentMove + 1];
       chess.current.move(move, { sloppy: true });
       const currentPosition = chess.current.fen();
@@ -89,7 +85,7 @@ const RandomGame = () => {
     // setCurrentMove(index);
     chess.current.reset();
 
-    for (let i = 0; i <= index; i++) {
+    for (let i = 0; i <= index * 2 + 1; i++) {
       chess.current.move(moves[i], { sloppy: true });
       setCurrentMove(i);
     }
