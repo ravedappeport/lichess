@@ -58,21 +58,16 @@ const RandomGame = () => {
     if (currentMove < moves.length - 1) {
       setCurrentMove(currentMove + 1);
   
-      // if (currentMove === 0) {
-      //   chess.current.load('start'); // reset the board to the starting position
-      // }
-  
-      const move = chess.current.move(moves[currentMove], { sloppy: true });
-  
-      if (!move) {
-        console.error(`Invalid move: ${moves[currentMove]}`);
-        return;
+      if (currentMove === 0) {
+        chess.current.load('start'); // reset the board to the starting position
       }
   
+      const move = moves[currentMove + 1];
+      chess.current.move(move, { sloppy: true });
       const currentPosition = chess.current.fen();
       setCurrentPosition(currentPosition);
     }
-  }
+  }  
   
   function handleMoveBackward() {
     if (currentMove > 0) {
