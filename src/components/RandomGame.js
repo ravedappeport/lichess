@@ -98,6 +98,7 @@ const RandomGame = () => {
     <div className="random-game">
       <div className="random-game-header">
         <h1>Random Top Lichess Games</h1>
+        <p>Only rated games by players currently considered top 10 in bullet, blitz, classic, or rapid chess variants</p>
       </div>
       <div className="game-container">
         <div className="game-info-container">

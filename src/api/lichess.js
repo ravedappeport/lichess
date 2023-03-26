@@ -35,6 +35,8 @@ export async function fetchRandomGame() {
           color: 'random',
           pgnInJson: true,
           opening: true,
+          literate: true, /* see https://lichess.org/api#tag/Games/operation/apiGamesUser */
+          rated: true, /* see https://lichess.org/api#tag/Games/operation/apiGamesUser */
         }, 
         headers: {
           Accept: 'application/x-ndjson',
