@@ -57,8 +57,9 @@ const RandomGame = () => {
   function handleMoveForward() {
     if (currentMove < moves.length - 1) {
       setCurrentMove(currentMove + 1);
-  
-      const move = moves[currentMove + 1];
+      
+      /* handle for the beginning of the game */
+      const move = moves[currentMove]
       chess.current.move(move, { sloppy: true });
       const currentPosition = chess.current.fen();
       setCurrentPosition(currentPosition);
@@ -82,14 +83,14 @@ const RandomGame = () => {
 
   /* reset the game to a point in time in the move history */
   const handleMovePairClick = (index) => {
-    // setCurrentMove(index);
     chess.current.reset();
 
     for (let i = 0; i <= index * 2 + 1; i++) {
       chess.current.move(moves[i], { sloppy: true });
-      setCurrentMove(i);
     }
 
+    /* this was annoying to figure out */
+    setCurrentMove(index * 2 + 2);
     const currentPosition = chess.current.fen();
     setCurrentPosition(currentPosition);
   };
