@@ -5,6 +5,11 @@
 .move-pair {
   display: flex;
   align-items: center;
+  cursor: pointer;
+}
+
+.move-pair:hover {
+  text-decoration: underline;
 }
 
 .move-number {
@@ -24,4 +29,9 @@
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0.1);
   border-radius: 5px;
+}
+
+.move-list {
+  overflow-y: scroll;
+  max-height: 500px;
 }
